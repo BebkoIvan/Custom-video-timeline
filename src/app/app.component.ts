@@ -12,7 +12,7 @@ export class AppComponent implements OnInit, AfterViewInit {
   videoNativeElement: HTMLVideoElement;
   currentTime = 0;
   matchEvents$ = this.evApi.getEvents();
-  @ViewChild('videoPlayer', {static: false}) videoplayer: ElementRef<HTMLVideoElement>;
+  @ViewChild('videoPlayer') videoplayer: ElementRef<HTMLVideoElement>;
 
   constructor(private evApi: EventsApiService) {}
 
