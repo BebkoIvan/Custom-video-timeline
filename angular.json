@@ -126,5 +126,8 @@
       }
     }
   },
-  "defaultProject": "video-playback"
+  "defaultProject": "video-playback",
+  "cli": {
+    "analytics": false
+  }
 }

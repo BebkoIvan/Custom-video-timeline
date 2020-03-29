@@ -14,7 +14,6 @@ import { MatCommonModule } from '@angular/material/core';
   imports: [
     BrowserModule,
     HttpClientModule,
-    MatCommonModule,
     MatProgressBarModule,
     AppRoutingModule,
     BrowserAnimationsModule

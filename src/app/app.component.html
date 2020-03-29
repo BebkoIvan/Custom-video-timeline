@@ -1,24 +1,35 @@
 <!--The content below is only a placeholder and can be replaced.-->
 <div style="text-align:center" class="main-container">
   <h1>
-    Welcome to {{ title }}!
+    Welcome to {{ title }}! Please use SPACE(Play/Pause) and Arrow-keys to navigate backward/forward
   </h1>
-  <video src="{{videoSrc}}" #videoPlayer controls (timeupdate)="setCurrentTime($event)"></video>
-  <div class="timeline">
-    <div class="timeline-progress">
-      <mat-progress-bar
-          class="example-margin"
-          [color]="primary"
-          [value]="100"
-          >
+  <div class="video-container">
+    <video src="{{videoSrc}}" #videoPlayer (timeupdate)="setCurrentTime($event)"></video>
+    <div class="timeline">
+      <div class="timeline-progress" *ngIf="videoNativeElement">
+        <div *ngFor="let ev of matchEvents$ | async" (mouseleave)="toggleTooltip(ev)" (mouseenter)="toggleTooltip(ev)">
+          <div class="events-tooltip" *ngIf="ev.group && ev.showTooltip"
+            [ngStyle]="{'left': 'calc(' +  ev.events[0].leftOffset  + '% - 42px)'}">
+            <div class="match-event-item" *ngFor="let item of ev.events" (click)="goToEvent(item)">
+              <span [ngStyle]="{'background-color': item.color}">{{item.type}}</span>
+              <span>{{item.time * 1000 | date:'mm:ss':'UTC'}}</span>
+            </div>
+          </div>
+          <span class="match-event" (click)="goToEvent(ev.group ? ev.events[0] : ev )"
+            [ngClass]="{'group': ev.group}"
+            [ngStyle]="{'background-color': ev.group ? ev.events[0].color : ev.color, 'left': 'calc(' + (ev.group ? ev.events[0].leftOffset : ev.leftOffset)  + '% - 20px)'}">
+            {{ev.group ? ev.events[0].type : ev.type}}
+          </span>
+        </div>
+        <mat-progress-bar [color]="'accent'" [value]="progress">
         </mat-progress-bar>
-    </div>
-    <div class="timeline-stamps">
-      <span *ngIf="videoNativeElement"><strong>{{currentTime * 1000 | date:'mm:ss':'UTC'}}</strong> </span>
-      <span *ngIf="videoNativeElement"><strong>{{videoNativeElement.duration * 1000 | date:'mm:ss':'UTC'}}</strong></span>
+      </div>
+      <div class="timeline-stamps" *ngIf="videoNativeElement">
+        <span><strong>{{currentTime * 1000 | date:'mm:ss':'UTC'}}</strong> </span>
+        <span><strong>{{videoNativeElement.duration * 1000 | date:'mm:ss':'UTC'}}</strong></span>
+      </div>
     </div>
   </div>
-  <p *ngFor="let ev of matchEvents$ | async">{{ev.type}}</p>
-  </div>
+</div>
 
 <router-outlet></router-outlet>
